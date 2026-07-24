@@ -9,6 +9,7 @@ module ApplicationCable
     private
 
     def find_verified_user
+      token = request.params[:token]
       payload = JwtService.decode(token)
 
       if payload
