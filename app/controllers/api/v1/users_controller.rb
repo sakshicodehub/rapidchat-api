@@ -7,7 +7,7 @@ class Api::V1::UsersController < ApplicationController
     render json: { succes: true, data: user }, status: :ok
   end
 
-  privare
+  private
 
   def user_params
     params.require(:user).permit(:name, :phone, :last_seen_at, :online, :about, :avatar_url)

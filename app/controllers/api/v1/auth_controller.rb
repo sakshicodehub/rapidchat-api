@@ -14,7 +14,7 @@ class Api::V1::AuthController < ApplicationController
   end
 
   def verify_otp
-    phone = params.dig(:phone, :phone)
+    phone = params.dig(:phone)
     user = User.find_by(phone: phone)
     if OtpService.verify(user, params[:otp])
       token = JwtService.encode(

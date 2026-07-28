@@ -13,7 +13,9 @@ class Api::V1::MessagesController < ApplicationController
 
       ActionCable.server.broadcast(
         "chat_#{@message.chat_id}",
-        MessageSerializer.new(@message)
+        {
+          message: MessageSerializer.new(@message)
+        }
       )
 
       render json: { success: true, data:  MessageSerializer.new(@message) }, status: :ok
