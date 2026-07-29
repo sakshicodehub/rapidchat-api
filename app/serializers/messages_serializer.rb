@@ -4,6 +4,6 @@ class MessagesSerializer
   end
 
   def serialize
-    @messages.map { |message| MessageSerializer(message).serialize }
+    @messages.map { |message| MessageSerializer.new(message).serialize }
   end
 end

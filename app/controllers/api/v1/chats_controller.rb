@@ -42,7 +42,6 @@ class Api::V1::ChatsController < ApplicationController
   private
 
   def direct_chat
-    byebug
     @receiver = User.find_by(phone: chat_params["phone"])
     chat =Chat.create!(chat_type: :direct_chat, created_by_id: current_user.id)
 
@@ -63,21 +62,22 @@ class Api::V1::ChatsController < ApplicationController
   def group_chat
     chat = Chat.create!(
       chat_type: :group_chat,
-      name: params[:name],
+      name: chat_params[:name],
       created_by_id: current_user.id
     )
-
     ChatMember.create!(
       chat: chat,
       user: current_user,
-      admin: true,
+      role: "admin",
       joined_at: Time.current
     )
 
-    params[:member_ids].each do |user_id|
+    users = User.where(phone: chat_params[:member])
+
+    users.each do |user|
       ChatMember.create!(
         chat: chat,
-        user_id: user_id,
+        user_id: user.id,
         joined_at: Time.current
       )
     chat
@@ -85,6 +85,6 @@ class Api::V1::ChatsController < ApplicationController
   end
 
   def chat_params
-    params.require(:chat).permit(:phone, :chat_type, :created_by)
+    params.require(:chat).permit(:phone, :chat_type, :created_by, :name, member: [])
   end
 end

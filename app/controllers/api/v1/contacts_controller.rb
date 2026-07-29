@@ -9,7 +9,6 @@ class Api::V1::ContactsController < ApplicationController
     render json: ContactSerializer.new(contact, current_user).serialize
   end
   def create
-    byebug
     phone = params.dig(:contact, :phone)
     user = User.find_or_create_by(phone: phone)
     @contact = Contact.new(contact_params.merge(

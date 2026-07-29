@@ -11,14 +11,12 @@ class Api::V1::MessagesController < ApplicationController
 
     if @message.persisted?
 
-      ActionCable.server.broadcast(
-        "chat_#{@message.chat_id}",
-        {
-          message: MessageSerializer.new(@message)
-        }
-      )
+      serialize_message = MessageSerializer.new(@message).serialize
 
-      render json: { success: true, data:  MessageSerializer.new(@message) }, status: :ok
+      ActionCable.server.broadcast(
+        "chat_#{@message.chat_id}", {message: serialize_message})
+
+      render json: { success: true, data:  {message: serialize_message} }, status: :ok
     else
       render json: { success: false, errors: @message.errors }, status: :unprocessable_entity
     end
