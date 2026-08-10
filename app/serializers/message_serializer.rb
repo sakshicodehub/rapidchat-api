@@ -15,7 +15,16 @@ class MessageSerializer
       sender_id: @message.sender_id,
       sender_name: name,
       sent_at: @message.sent_at,
-      updated_at: @message.updated_at
+      updated_at: @message.updated_at,
+      attachments: @message.attachments.map do |attachment|
+        { 
+          id: attachment.id, 
+          filename: attachment.filename.to_s, 
+          content_type: attachment.content_type, 
+          byte_size: attachment.byte_size, 
+          url: Rails.application.routes.url_helpers.rails_blob_url( attachment, host: "http://localhost:3000" ) 
+        } 
+        end
     }
   end
 end

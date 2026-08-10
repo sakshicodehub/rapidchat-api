@@ -3,9 +3,10 @@ class Api::V1::MessagesController < ApplicationController
     @messages = Message.where(chat_id: params[:chat_id]).order(sent_at: :asc)
     render json: MessagesSerializer.new(@messages)
   end
+  
   def create
     @chat = Chat.find(message_params["chat_id"])
-    @message = Message.new(message_params)
+    # @message = Message.new(message_params)
 
     @message = @chat.messages.create!(message_params.merge(sender: current_user))
 
@@ -25,6 +26,6 @@ class Api::V1::MessagesController < ApplicationController
   private
 
   def message_params
-    params.require(:message).permit(:content, :chat_id, :message_type, :sent_at)
+    params.require(:message).permit(:content, :chat_id, :message_type, :sent_at, :reply_to_id, :edited_at, :deleted_at, attachments: [])
   end
 end

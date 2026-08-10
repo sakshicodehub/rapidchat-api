@@ -7,6 +7,8 @@ class Message < ApplicationRecord
 
   has_many :message_receipts,
            dependent: :destroy
+  
+  has_many_attached :attachments
 
   # enum message_type: {
   #             text: 0,
